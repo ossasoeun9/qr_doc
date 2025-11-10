@@ -1,0 +1,83 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:qr_doc/core/utils.dart';
+import 'package:qr_doc/pages/login_page.dart';
+import 'package:qr_doc/pages/qr_detail/qr_detail_page.dart';
+import 'package:qr_doc/pages/scan_qr_page.dart';
+import 'package:qr_doc/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'firebase_options.dart';
+
+late final SharedPreferences storagePref;
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseFirestore.instance.settings = const Settings(
+    persistenceEnabled: true,
+  );
+  if (kDebugMode) {
+    FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
+    FirebaseStorage.instance.useStorageEmulator('localhost', 9199);
+  }
+  storagePref = await SharedPreferences.getInstance();
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    var theme = MaterialTheme(Theme.of(context).textTheme);
+    return MaterialApp.router(
+      title: 'QR DOC',
+      themeMode: ThemeMode.light,
+      theme: theme.lightHighContrast(),
+      darkTheme: theme.darkHighContrast(),
+      routerConfig: _router,
+    );
+  }
+}
+
+final _router = GoRouter(
+  redirect: (context, state) {
+    final loggedIn = LoginManager.isLoggedIn;
+    final goingToLogin = state.matchedLocation == '/login';
+    if (!loggedIn && !goingToLogin) return '/login';
+    if (loggedIn && goingToLogin) return '/';
+    return null;
+  },
+  routes: [
+    GoRoute(
+      path: "/",
+      builder: (context, state) {
+        return ScanQrPage();
+      },
+    ),
+    GoRoute(
+      path: "/login",
+      builder: (context, state) {
+        return LoginPage();
+      },
+    ),
+    GoRoute(
+      path: "/doc/detail",
+      builder: (context, state) {
+        var data = state.extra as Map<String, dynamic>?;
+        return QrDetailPage(code: data?['code'] ?? "");
+      },
+      redirect: (context, state) {
+        var data = state.extra as Map<String, dynamic>?;
+        var noCode = data?["code"]?.toString().isNotEmpty != true;
+        if (noCode) return "/";
+        return null;
+      },
+    ),
+  ],
+);
