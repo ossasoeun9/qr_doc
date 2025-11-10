@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_doc/core/constants.dart';
 
 class _VerifyDocProvider extends ChangeNotifier {
   final noteCtr = TextEditingController();
@@ -9,20 +10,20 @@ class _VerifyDocProvider extends ChangeNotifier {
 
   void setIsCompliment(bool v) {
     if (v) {
-      _invalidOpt = null;
+      _invalidOptId = null;
     } else {
-      _invalidOpt = 3;
+      _invalidOptId = 3;
     }
     _isCompliment = v;
     notifyListeners();
   }
 
-  int? _invalidOpt;
+  int? _invalidOptId;
 
-  int? get invalidOpt => _invalidOpt;
+  int? get invalidOptId => _invalidOptId;
 
   void setInvalidOpt(int v) {
-    _invalidOpt = v;
+    _invalidOptId = v;
     notifyListeners();
   }
 }
@@ -31,12 +32,7 @@ void showVerifyDocDialog(
   BuildContext context,
   void Function(bool, int?, String) onSubmit,
 ) {
-  const invalidOpts = [
-    "Invalid date",
-    "Invalid quantiy",
-    "Invalid location",
-    "Other",
-  ];
+  const invalidOpts = InvalidOptions.options;
   showDialog(
     context: context,
     barrierDismissible: false,
@@ -46,7 +42,7 @@ void showVerifyDocDialog(
         builder: (context, _) {
           var provider = context.watch<_VerifyDocProvider>();
           return AlertDialog(
-            title: Text("Verify Document"),
+            title: Text("ផ្ទៀងផ្ទាត់ឯកសារ"),
             content: Container(
               constraints: BoxConstraints(maxWidth: 600),
               child: Column(
@@ -56,25 +52,26 @@ void showVerifyDocDialog(
                     () {
                       provider.setIsCompliment(true);
                     },
-                    "Compliment",
+                    "ត្រឹមត្រូវ",
                     provider.isCompliment,
                   ),
                   _optChoice(
                     () {
                       provider.setIsCompliment(false);
                     },
-                    "Non-compliment",
+                    "មិនត្រឹមត្រូវ",
                     !provider.isCompliment,
                   ),
                   if (!provider.isCompliment) ...{
                     Divider(),
                     ...List.generate(invalidOpts.length, (index) {
+                      var opt = invalidOpts[index];
                       return _optChoice(
                         () {
-                          provider.setInvalidOpt(index);
+                          provider.setInvalidOpt(opt.id);
                         },
-                        invalidOpts[index],
-                        index == provider.invalidOpt,
+                        opt.title,
+                        opt.id == provider.invalidOptId,
                       );
                     }),
                     Divider(),
@@ -82,7 +79,7 @@ void showVerifyDocDialog(
                   TextField(
                     controller: provider.noteCtr,
                     keyboardType: TextInputType.multiline,
-                    decoration: InputDecoration(labelText: "Note"),
+                    decoration: InputDecoration(labelText: "ចំណាំ"),
                   ),
                 ],
               ),
@@ -91,10 +88,10 @@ void showVerifyDocDialog(
               FilledButton(
                 onPressed: () => onSubmit(
                   provider.isCompliment,
-                  provider.invalidOpt,
+                  provider.invalidOptId,
                   provider.noteCtr.text.trim(),
                 ),
-                child: Text("Done"),
+                child: Text("រួចរាល់"),
               ),
             ],
           );
@@ -105,19 +102,20 @@ void showVerifyDocDialog(
 }
 
 Widget _optChoice(void Function() onTap, String label, bool isCheck) {
-  return Row(
-    children: [
-      Padding(
-        padding: const EdgeInsets.all(5),
-        child: InkWell(
-          onTap: onTap,
+  return InkWell(
+    splashColor: Colors.transparent,
+    onTap: onTap,
+    child: Row(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(5),
           child: Icon(
             isCheck ? Icons.radio_button_checked : Icons.radio_button_off,
           ),
         ),
-      ),
-      const SizedBox(width: 10),
-      Text(label),
-    ],
+        const SizedBox(width: 10),
+        Text(label),
+      ],
+    ),
   );
 }
