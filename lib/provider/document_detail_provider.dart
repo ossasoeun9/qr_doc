@@ -52,6 +52,7 @@ class DocumentDetailProvider extends ChangeNotifier {
       "userFullName": UserModel.getProfile()?.fullName ?? "",
       "docId": _docsRef.doc(document!.uuid),
       "isCompliment": isCompliment,
+      "qrCodeContent": document?.qrCodeContent,
       if (invalidOpt != null) "invalidOpt": invalidOpt,
       if (note.isNotEmpty) "note": note,
       "scannedAt": Timestamp.now(),

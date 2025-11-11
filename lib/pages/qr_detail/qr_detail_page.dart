@@ -10,8 +10,9 @@ import '../../models/user_model.dart';
 
 class QrDetailPage extends StatelessWidget {
   final String code;
+  final bool isViewOnly;
 
-  const QrDetailPage({super.key, required this.code});
+  const QrDetailPage({super.key, required this.code, this.isViewOnly = false});
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +56,7 @@ class QrDetailPage extends StatelessWidget {
             ),
           ),
           body: _body(provider),
-          floatingActionButton: provider.document != null
+          floatingActionButton: provider.document != null && !isViewOnly
               ? FilledButton(
                   onPressed: () {
                     showVerifyDocDialog(context, (v1, v2, v3) {

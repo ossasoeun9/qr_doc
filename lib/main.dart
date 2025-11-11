@@ -8,6 +8,7 @@ import 'package:qr_doc/core/utils.dart';
 import 'package:qr_doc/pages/login_page.dart';
 import 'package:qr_doc/pages/qr_detail/qr_detail_page.dart';
 import 'package:qr_doc/pages/scan_qr_page.dart';
+import 'package:qr_doc/pages/user_scan_list.dart';
 import 'package:qr_doc/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -57,6 +58,12 @@ final _router = GoRouter(
     GoRoute(
       path: "/",
       builder: (context, state) {
+        return UserScanListPage();
+      },
+    ),
+    GoRoute(
+      path: "/scan",
+      builder: (context, state) {
         return ScanQrPage();
       },
     ),
@@ -70,7 +77,10 @@ final _router = GoRouter(
       path: "/doc/detail",
       builder: (context, state) {
         var data = state.extra as Map<String, dynamic>?;
-        return QrDetailPage(code: data?['code'] ?? "");
+        return QrDetailPage(
+          code: data?['code'] ?? "",
+          isViewOnly: data?['isViewOnly'] == "1",
+        );
       },
       redirect: (context, state) {
         var data = state.extra as Map<String, dynamic>?;
