@@ -118,7 +118,10 @@ class UserScanListPage extends StatelessWidget {
                     children: [
                       // 🔹 Section header
                       Padding(
-                        padding: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 25,
+                          vertical: 10,
+                        ),
                         child: Text(
                           _formatDateHeader(DateTime.parse(dayKey)),
                           style: TextStyle(fontSize: 16),
@@ -155,7 +158,7 @@ class UserScanListPage extends StatelessWidget {
     var statusColor = isCompliment ? Colors.green : Colors.red;
     var status = isCompliment ? "ត្រឹមត្រូវ" : "មិនត្រឹមត្រូវ";
 
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         context.go(
           "/doc/detail",
