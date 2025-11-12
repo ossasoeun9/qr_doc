@@ -41,7 +41,7 @@ class QrDetailPage extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "Hello, ${user?.firstName}!",
+                        "សួស្តី, ${user?.firstName}!",
                         style: context.textTheme.labelLarge,
                       ),
                     ],
@@ -76,7 +76,7 @@ class QrDetailPage extends StatelessWidget {
                       }
                     });
                   },
-                  child: Text("Verify"),
+                  child: Text("ផ្ទៀងផ្ទាត់"),
                 )
               : FloatingActionButton(
                   onPressed: () => context.go("/"),

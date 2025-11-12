@@ -38,7 +38,7 @@ class UserScanListPage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "Hello, ${UserModel.getProfile()?.fullName ?? ""}!",
+                      "សួស្តី, ${UserModel.getProfile()?.fullName ?? ""}!",
                       style: context.textTheme.labelLarge,
                     ),
                   ],
@@ -273,11 +273,11 @@ class UserScanListPage extends StatelessWidget {
     final target = DateTime(date.year, date.month, date.day);
 
     if (target == today) {
-      return "Today";
+      return "ថ្ងៃនេះ";
     } else if (target == yesterday) {
-      return "Yesterday";
+      return "ម្សិលមិញ";
     } else {
-      return DateFormat("dd MMM yyyy").format(date);
+      return DateFormat("dd MMM yyyy", "km").format(date);
     }
   }
 }

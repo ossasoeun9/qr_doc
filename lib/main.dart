@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:qr_doc/core/utils.dart';
 import 'package:qr_doc/pages/login_page.dart';
 import 'package:qr_doc/pages/qr_detail/qr_detail_page.dart';
@@ -18,6 +19,7 @@ late final SharedPreferences storagePref;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  initializeDateFormatting("km_KH");
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseFirestore.instance.settings = const Settings(
     persistenceEnabled: true,

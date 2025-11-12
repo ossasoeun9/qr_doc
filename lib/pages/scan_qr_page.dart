@@ -39,7 +39,7 @@ class _ScanQrPageState extends State<ScanQrPage> {
                     ),
                   ),
                   Text(
-                    "Hello, ${user?.firstName}!",
+                    "សួស្តី, ${user?.firstName}!",
                     style: context.textTheme.labelLarge,
                   ),
                 ],

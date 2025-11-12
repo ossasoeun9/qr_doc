@@ -77,27 +77,27 @@ class _LoginPageState extends State<LoginPage> {
                   width: 100,
                 ),
                 Text(
-                  "Welcome to QR DOC",
+                  "សូមស្វាគមន៍មកកាន់ QR DOC",
                   style: context.textTheme.titleLarge?.copyWith(
                     color: context.colorScheme.primary,
                   ),
                 ),
                 Text(
-                  "Please, enter username and password to login",
+                  "សូមបញ្ចូលឈ្មោះអ្នកប្រើប្រាស់ និងពាក្យសម្ងាត់ដើម្បីចូលប្រេី",
                   style: TextStyle(color: context.colorScheme.secondary),
                 ),
                 const SizedBox(height: 100),
                 TextFormField(
                   controller: _usernameCtr,
                   decoration: InputDecoration(
-                    labelText: 'Username',
+                    labelText: 'ឈ្មោះអ្នកប្រើប្រាស់',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                   validator: (str) {
                     if (str?.isNotEmpty != true) {
-                      return "Please, enter password";
+                      return "សូមបញ្ចូលឈ្មោះអ្នកប្រើប្រាស់";
                     }
                     return null;
                   },
@@ -106,14 +106,14 @@ class _LoginPageState extends State<LoginPage> {
                 TextFormField(
                   controller: _passwordCtr,
                   decoration: InputDecoration(
-                    labelText: 'Password',
+                    labelText: 'ពាក្យសម្ងាត់',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                   validator: (str) {
                     if (str?.isNotEmpty != true) {
-                      return "Please, enter password";
+                      return "សូមបញ្ចូលពាក្យសម្ងាត់";
                     }
                     return null;
                   },
@@ -139,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                           const SizedBox(width: 10),
                         } else
                           const SizedBox(width: 30),
-                        const Text("Log In"),
+                        const Text("ចូលប្រេី"),
                         const SizedBox(width: 30),
                       ],
                     ),
