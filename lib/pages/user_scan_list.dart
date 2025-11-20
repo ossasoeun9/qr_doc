@@ -6,10 +6,7 @@ import 'package:qr_doc/core/constants.dart';
 import 'package:qr_doc/core/utils.dart';
 import 'package:qr_doc/gen/assets.gen.dart';
 
-import '../models/InvalidOptionModel.dart';
 import '../models/user_model.dart';
-
-Map<int, InvalidOptionModel> _invalidOption = InvalidOptions.optionAsMap;
 
 class UserScanListPage extends StatelessWidget {
   const UserScanListPage({super.key});

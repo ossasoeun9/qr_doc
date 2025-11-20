@@ -8,6 +8,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:qr_doc/core/utils.dart';
 import 'package:qr_doc/pages/login_page.dart';
 import 'package:qr_doc/pages/qr_detail/qr_detail_page.dart';
+import 'package:qr_doc/pages/qr_detail/verify_doc_page.dart';
 import 'package:qr_doc/pages/scan_qr_page.dart';
 import 'package:qr_doc/pages/user_scan_list.dart';
 import 'package:qr_doc/theme.dart';
@@ -88,6 +89,24 @@ final _router = GoRouter(
         var data = state.extra as Map<String, dynamic>?;
         var noCode = data?["code"]?.toString().isNotEmpty != true;
         if (noCode) return "/";
+        return null;
+      },
+    ),
+    GoRoute(
+      path: "/doc/verify",
+      builder: (context, state) {
+        var data = state.extra as Map<String, dynamic>?;
+        return VerifyDocPage(
+          qrCodeContent: data?['code'] ?? "",
+          docId: data?["docId"] ?? "",
+        );
+      },
+      redirect: (context, state) {
+        var data = state.extra as Map<String, dynamic>?;
+        var noCode = data?["code"]?.toString().isNotEmpty != true;
+        if (noCode) return "/";
+        var noDocId = data?["docId"]?.toString().isNotEmpty != true;
+        if (noDocId) return "/";
         return null;
       },
     ),

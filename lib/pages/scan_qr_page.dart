@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gscankit/gscankit.dart';
-import 'package:qr_doc/core/utils.dart';
 import 'package:qr_doc/models/user_model.dart';
 
 class ScanQrPage extends StatefulWidget {
@@ -20,35 +19,8 @@ class _ScanQrPageState extends State<ScanQrPage> {
   Widget build(BuildContext context) {
     return GscanKit(
       controller: controller,
-      appBar: (context, controller) => PreferredSize(
-        preferredSize: Size(double.infinity, 80),
-        child: Container(
-          color: context.colorScheme.surface,
-          padding: EdgeInsets.symmetric(horizontal: 18),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "QR DOC",
-                    style: context.textTheme.titleLarge?.copyWith(
-                      color: context.colorScheme.primary,
-                    ),
-                  ),
-                  Text(
-                    "សួស្តី, ${user?.firstName}!",
-                    style: context.textTheme.labelLarge,
-                  ),
-                ],
-              ),
-              Image.asset("assets/images/logo_cir.png", height: 60, width: 60),
-            ],
-          ),
-        ),
-      ),
+      appBar: (context, controller) =>
+          AppBar(title: AppBar(title: Text("ស្វែងរកឯកសារ"))),
       onDetect: (BarcodeCapture capture) {
         if (capture.barcodes.isNotEmpty && !isDetected) {
           isDetected = true;

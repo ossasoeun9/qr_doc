@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_doc/core/utils.dart';
-import 'package:qr_doc/pages/qr_detail/dialog/verify_doc_dialog.dart';
 import 'package:qr_doc/provider/document_detail_provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
@@ -59,27 +58,15 @@ class QrDetailPage extends StatelessWidget {
           floatingActionButton: provider.document != null && !isViewOnly
               ? FilledButton(
                   onPressed: () {
-                    showVerifyDocDialog(context, (v1, v2, v3) {
-                      Navigator.of(context).pop();
-                      showLoadingDialog(context);
-                      var f = provider
-                          .addScannedData(v1, v2, v3)
-                          ?.then((_) {
-                            hideLoadingDialog(context);
-                            context.go("/");
-                          })
-                          .catchError((_) {
-                            hideLoadingDialog(context);
-                          });
-                      if (f == null) {
-                        hideLoadingDialog(context);
-                      }
-                    });
+                    context.go(
+                      "/doc/verify",
+                      extra: {"code": code, "docId": provider.document?.uuid},
+                    );
                   },
                   child: Text("ផ្ទៀងផ្ទាត់"),
                 )
               : FloatingActionButton(
-                  onPressed: () => context.go("/"),
+                  onPressed: () => context.push("/"),
                   child: Icon(Icons.home),
                 ),
         );
