@@ -57,8 +57,12 @@ final _router = GoRouter(
     final goingToLogin = state.matchedLocation == '/login';
     if (!loggedIn && !goingToLogin) return '/login';
     if (loggedIn && goingToLogin) return '/';
+    print(currentRoute);
+    print(state.matchedLocation);
+    print("----------");
     if (loggedIn && currentRoute != state.matchedLocation) {
-      return currentRoute;
+      resetCurrentRoute();
+      return "/";
     }
     return null;
   },
