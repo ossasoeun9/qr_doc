@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:qr_doc/core/app_navigator.dart';
 import 'package:qr_doc/core/utils.dart';
 
 import '../collection/user_collection.dart';
@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _goToHome() {
-    context.go("/");
+    context.goSafe("/");
   }
 
   @override

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_doc/core/utils.dart';
+import 'package:qr_doc/core/app_navigator.dart';
 import 'package:qr_doc/provider/document_detail_provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-
-import '../../models/user_model.dart';
 
 class QrDetailPage extends StatelessWidget {
   final String code;
@@ -19,56 +16,25 @@ class QrDetailPage extends StatelessWidget {
       create: (context) => DocumentDetailProvider(code),
       builder: (context, _) {
         var provider = context.watch<DocumentDetailProvider>();
-        var user = UserModel.getProfile();
         return Scaffold(
-          appBar: PreferredSize(
-            preferredSize: Size(double.infinity, 80),
-            child: Container(
-              color: context.colorScheme.surface,
-              padding: EdgeInsets.symmetric(horizontal: 18),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "QR DOC",
-                        style: context.textTheme.titleLarge?.copyWith(
-                          color: context.colorScheme.primary,
-                        ),
-                      ),
-                      Text(
-                        "សួស្តី, ${user?.firstName}!",
-                        style: context.textTheme.labelLarge,
-                      ),
-                    ],
-                  ),
-                  Image.asset(
-                    "assets/images/logo_cir.png",
-                    height: 60,
-                    width: 60,
-                  ),
-                ],
-              ),
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () => context.goSafe("/"),
+              icon: Icon(Icons.arrow_back),
             ),
           ),
           body: _body(provider),
           floatingActionButton: provider.document != null && !isViewOnly
               ? FilledButton(
                   onPressed: () {
-                    context.go(
-                      "/doc/verify",
+                    context.goSafe(
+                      "/doc-verify",
                       extra: {"code": code, "docId": provider.document?.uuid},
                     );
                   },
                   child: Text("ផ្ទៀងផ្ទាត់"),
                 )
-              : FloatingActionButton(
-                  onPressed: () => context.push("/"),
-                  child: Icon(Icons.home),
-                ),
+              : null,
         );
       },
     );

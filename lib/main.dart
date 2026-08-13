@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:qr_doc/core/app_navigator.dart';
 import 'package:qr_doc/core/utils.dart';
 import 'package:qr_doc/pages/login_page.dart';
 import 'package:qr_doc/pages/qr_detail/qr_detail_page.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     var theme = MaterialTheme(Theme.of(context).textTheme);
     return MaterialApp.router(
+      scaffoldMessengerKey: GlobalKey(),
       title: 'QR DOC',
       themeMode: ThemeMode.light,
       theme: theme.lightHighContrast(),
@@ -55,6 +57,9 @@ final _router = GoRouter(
     final goingToLogin = state.matchedLocation == '/login';
     if (!loggedIn && !goingToLogin) return '/login';
     if (loggedIn && goingToLogin) return '/';
+    if (loggedIn && currentRoute != state.matchedLocation) {
+      return currentRoute;
+    }
     return null;
   },
   routes: [
@@ -65,9 +70,10 @@ final _router = GoRouter(
       },
     ),
     GoRoute(
+      name: "scan",
       path: "/scan",
       builder: (context, state) {
-        return ScanQrPage();
+        return PopScope(canPop: false, child: ScanQrPage());
       },
     ),
     GoRoute(
@@ -77,7 +83,7 @@ final _router = GoRouter(
       },
     ),
     GoRoute(
-      path: "/doc/detail",
+      path: "/doc-detail",
       builder: (context, state) {
         var data = state.extra as Map<String, dynamic>?;
         return QrDetailPage(
@@ -85,15 +91,15 @@ final _router = GoRouter(
           isViewOnly: data?['isViewOnly'] == "1",
         );
       },
-      redirect: (context, state) {
+      /*redirect: (context, state) {
         var data = state.extra as Map<String, dynamic>?;
         var noCode = data?["code"]?.toString().isNotEmpty != true;
         if (noCode) return "/";
         return null;
-      },
+      },*/
     ),
     GoRoute(
-      path: "/doc/verify",
+      path: "/doc-verify",
       builder: (context, state) {
         var data = state.extra as Map<String, dynamic>?;
         return VerifyDocPage(
@@ -101,14 +107,14 @@ final _router = GoRouter(
           docId: data?["docId"] ?? "",
         );
       },
-      redirect: (context, state) {
+      /*redirect: (context, state) {
         var data = state.extra as Map<String, dynamic>?;
         var noCode = data?["code"]?.toString().isNotEmpty != true;
         if (noCode) return "/";
         var noDocId = data?["docId"]?.toString().isNotEmpty != true;
         if (noDocId) return "/";
         return null;
-      },
+      },*/
     ),
   ],
 );

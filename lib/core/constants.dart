@@ -1,4 +1,4 @@
-import 'package:qr_doc/models/InvalidOptionModel.dart';
+import 'package:qr_doc/models/invalid_option_model.dart';
 
 class InvalidOptions {
   const InvalidOptions._();

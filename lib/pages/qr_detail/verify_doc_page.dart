@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_doc/core/app_navigator.dart';
 import 'package:qr_doc/core/utils.dart';
 
 import '../../core/constants.dart';
@@ -25,12 +25,29 @@ class _VerifyDocPageState extends State<VerifyDocPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("ផ្ទៀងផ្ទាត់ឯកសារ")),
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () => context.goSafe("/"),
+          icon: Icon(Icons.arrow_back),
+        ),
+        title: Text("ផ្ទៀងផ្ទាត់ឯកសារ"),
+      ),
       body: ChangeNotifierProvider<VerifyDocProvider>(
         create: (context) =>
             VerifyDocProvider(widget.docId, widget.qrCodeContent),
         builder: (context, _) {
           var provider = context.watch<VerifyDocProvider>();
+
+          if (provider.docId.isEmpty) {
+            return Center(
+              child: SizedBox(
+                width: 200,
+                height: 200,
+                child: Image.asset("assets/images/no_data.png"),
+              ),
+            );
+          }
+
           return Center(
             child: Container(
               constraints: BoxConstraints(maxWidth: 600),
@@ -113,7 +130,7 @@ class _VerifyDocPageState extends State<VerifyDocPage> {
                       height: 40,
                       child: FilledButton.tonal(
                         onPressed: () => provider.addScannedData(
-                          onSuccess: () => context.go("/"),
+                          onSuccess: () => context.goSafe("/"),
                           onError: () => context.showErrorMessage(),
                         ),
                         child: Row(

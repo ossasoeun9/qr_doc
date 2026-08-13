@@ -23,6 +23,17 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/cancel.png
+  AssetGenImage get cancel => const AssetGenImage('assets/images/cancel.png');
+
+  /// File path: assets/images/checklist.png
+  AssetGenImage get checklist =>
+      const AssetGenImage('assets/images/checklist.png');
+
+  /// File path: assets/images/delivery-truck.png
+  AssetGenImage get deliveryTruck =>
+      const AssetGenImage('assets/images/delivery-truck.png');
+
   /// File path: assets/images/logo_cir.png
   AssetGenImage get logoCir =>
       const AssetGenImage('assets/images/logo_cir.png');
@@ -30,8 +41,32 @@ class $AssetsImagesGen {
   /// File path: assets/images/no_data.png
   AssetGenImage get noData => const AssetGenImage('assets/images/no_data.png');
 
+  /// File path: assets/images/option.png
+  AssetGenImage get option => const AssetGenImage('assets/images/option.png');
+
+  /// File path: assets/images/overflow.png
+  AssetGenImage get overflow =>
+      const AssetGenImage('assets/images/overflow.png');
+
+  /// File path: assets/images/scan.png
+  AssetGenImage get scan => const AssetGenImage('assets/images/scan.png');
+
+  /// File path: assets/images/shopping.png
+  AssetGenImage get shopping =>
+      const AssetGenImage('assets/images/shopping.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [logoCir, noData];
+  List<AssetGenImage> get values => [
+    cancel,
+    checklist,
+    deliveryTruck,
+    logoCir,
+    noData,
+    option,
+    overflow,
+    scan,
+    shopping,
+  ];
 }
 
 class Assets {

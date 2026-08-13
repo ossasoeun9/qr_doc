@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:gscankit/gscankit.dart';
+import 'package:qr_doc/core/app_navigator.dart';
 import 'package:qr_doc/models/user_model.dart';
 
 class ScanQrPage extends StatefulWidget {
@@ -19,13 +19,18 @@ class _ScanQrPageState extends State<ScanQrPage> {
   Widget build(BuildContext context) {
     return GscanKit(
       controller: controller,
-      appBar: (context, controller) =>
-          AppBar(title: AppBar(title: Text("ស្វែងរកឯកសារ"))),
+      appBar: (_, controller) => AppBar(
+        leading: IconButton(
+          onPressed: () => context.goSafe("/"),
+          icon: Icon(Icons.arrow_back),
+        ),
+        title: Text("ស្វែងរកឯកសារ"),
+      ),
       onDetect: (BarcodeCapture capture) {
         if (capture.barcodes.isNotEmpty && !isDetected) {
           isDetected = true;
-          context.go(
-            "/doc/detail",
+          context.goSafe(
+            "/doc-detail",
             extra: {"code": capture.barcodes.first.displayValue ?? ""},
           );
         }
