@@ -27,7 +27,7 @@ void main() async {
     persistenceEnabled: true,
   );
   if (kDebugMode) {
-    FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
+    FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8060);
     FirebaseStorage.instance.useStorageEmulator('localhost', 9199);
   }
   storagePref = await SharedPreferences.getInstance();
@@ -69,15 +69,15 @@ final _router = GoRouter(
   routes: [
     GoRoute(
       path: "/",
-      builder: (context, state) {
-        return UserScanListPage();
+      pageBuilder: (context, state) {
+        return NoTransitionPage(child: UserScanListPage());
       },
     ),
     GoRoute(
       name: "scan",
       path: "/scan",
-      builder: (context, state) {
-        return PopScope(canPop: false, child: ScanQrPage());
+      pageBuilder: (context, state) {
+        return NoTransitionPage(child: ScanQrPage());
       },
     ),
     GoRoute(
@@ -88,11 +88,13 @@ final _router = GoRouter(
     ),
     GoRoute(
       path: "/doc-detail",
-      builder: (context, state) {
+      pageBuilder: (context, state) {
         var data = state.extra as Map<String, dynamic>?;
-        return QrDetailPage(
-          code: data?['code'] ?? "",
-          isViewOnly: data?['isViewOnly'] == "1",
+        return NoTransitionPage(
+          child: QrDetailPage(
+            code: data?['code'] ?? "",
+            isViewOnly: data?['isViewOnly'] == "1",
+          ),
         );
       },
       /*redirect: (context, state) {
@@ -104,11 +106,13 @@ final _router = GoRouter(
     ),
     GoRoute(
       path: "/doc-verify",
-      builder: (context, state) {
+      pageBuilder: (context, state) {
         var data = state.extra as Map<String, dynamic>?;
-        return VerifyDocPage(
-          qrCodeContent: data?['code'] ?? "",
-          docId: data?["docId"] ?? "",
+        return NoTransitionPage(
+          child: VerifyDocPage(
+            qrCodeContent: data?['code'] ?? "",
+            docId: data?["docId"] ?? "",
+          ),
         );
       },
       /*redirect: (context, state) {
