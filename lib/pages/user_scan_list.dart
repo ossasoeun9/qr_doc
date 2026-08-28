@@ -200,6 +200,7 @@ class _UserScanListPageState extends State<UserScanListPage> {
     final bool isCompliment = data["isCompliment"];
     final String userFullName = data["userFullName"] ?? "";
     final String note = data["note"] ?? "";
+    final String? checkpointName = data["checkpointName"];
     final scannedAt = (data["scannedAt"] as Timestamp?)?.toDate();
     final scannedAtString = scannedAt != null
         ? DateFormat('dd MMM yyyy hh:mm a', "km")
@@ -208,7 +209,7 @@ class _UserScanListPageState extends State<UserScanListPage> {
               .replaceFirst("p", "ល្ងាច")
         : 'N/A';
     var statusColor = isCompliment ? Colors.green : Colors.red;
-    var status = isCompliment ? "ត្រឹមត្រូវ" : "មិនត្រឹមត្រូវ";
+    // var status = isCompliment ? "ត្រឹមត្រូវ" : "មិនត្រឹមត្រូវ";
 
     var complimentImage = isCompliment
         ? Assets.images.checklist
@@ -243,14 +244,15 @@ class _UserScanListPageState extends State<UserScanListPage> {
             ],
           ),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                width: 80,
-                height: 80,
+                width: 50,
+                height: 50,
                 child: CircleAvatar(
                   backgroundColor: statusColor.withAlpha(30),
                   child: Padding(
-                    padding: const EdgeInsets.all(15),
+                    padding: const EdgeInsets.all(10),
                     child: complimentImage.image(color: statusColor),
                   ),
                 ),
@@ -260,37 +262,17 @@ class _UserScanListPageState extends State<UserScanListPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (qrCodeContent != null) ...{
-                      Text(qrCodeContent, style: context.textTheme.titleMedium),
-                      SizedBox(height: 5),
-                    },
-                    Text(
-                      status,
-                      style: context.textTheme.titleMedium?.copyWith(
-                        color: statusColor,
-                      ),
-                    ),
-                    SizedBox(height: 5),
-                    if (!isCompliment) ...{
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 25,
-                            height: 25,
-                            child: iconOpt.image(color: Colors.black),
-                          ),
-                          const SizedBox(width: 5),
-                          Text(
-                            InvalidOptions.optionAsMap[invalidOpt]?.title ??
-                                "ផ្សេងៗ",
-                            style: context.textTheme.titleMedium?.copyWith(
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 5),
-                    },
+                    // if (qrCodeContent != null) ...{
+                    //   Text(qrCodeContent, style: context.textTheme.titleMedium),
+                    //   SizedBox(height: 5),
+                    // },
+                    // Text(
+                    //   status,
+                    //   style: context.textTheme.titleMedium?.copyWith(
+                    //     color: statusColor,
+                    //   ),
+                    // ),
+                    // SizedBox(height: 5),
                     Text(
                       userFullName,
                       style: context.textTheme.titleMedium?.copyWith(
@@ -298,6 +280,26 @@ class _UserScanListPageState extends State<UserScanListPage> {
                       ),
                     ),
                     SizedBox(height: 5),
+                    if (!isCompliment) ...{
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: iconOpt.image(color: Colors.red),
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            InvalidOptions.optionAsMap[invalidOpt]?.title ??
+                                "ផ្សេងៗ",
+                            style: context.textTheme.titleMedium?.copyWith(
+                              color: Colors.red,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 5),
+                    },
                     Text(
                       scannedAtString,
                       style: context.textTheme.titleMedium?.copyWith(

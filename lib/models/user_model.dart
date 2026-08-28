@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:qr_doc/main.dart';
 
 class UserModel {
@@ -7,16 +8,24 @@ class UserModel {
   final String username;
   final String firstName;
   final String lastName;
+  final DocumentReference<Map<String, dynamic>>? checkpoint;
 
   String get fullName => "$firstName $lastName";
 
-  UserModel(this.uuid, this.username, this.firstName, this.lastName);
+  UserModel(
+    this.uuid,
+    this.username,
+    this.firstName,
+    this.lastName,
+    this.checkpoint,
+  );
 
   String toJson() => json.encode({
     "uuid": uuid,
     "username": username,
     "firstName": firstName,
     "lastName": lastName,
+    "checkpoint": checkpoint?.id,
   });
 
   factory UserModel.fromJson(String str) {
@@ -26,6 +35,11 @@ class UserModel {
       map["username"],
       map["firstName"],
       map["lastName"],
+      map["checkpoint"] == null
+          ? null
+          : FirebaseFirestore.instance
+                .collection("checkpoints")
+                .doc(map["checkpoint"]),
     );
   }
 

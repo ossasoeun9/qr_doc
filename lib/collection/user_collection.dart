@@ -12,6 +12,7 @@ class UserCollection {
             data?["username"] ?? "",
             data?["firstName"] ?? "",
             data?["lastName"] ?? "",
+            data?["checkpoint"],
           );
         },
         toFirestore: (user, opt) {

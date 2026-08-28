@@ -39,26 +39,57 @@ class VerifyDocProvider extends ChangeNotifier {
 
   final _scannedListRef = FirebaseFirestore.instance.collection("scannedList");
   final _userRef = FirebaseFirestore.instance.collection("users");
-  void addScannedData({required void Function() onSuccess, required void Function() onError}) {
-    _isLoading = true;
-    notifyListeners();
-    _scannedListRef.add({
-      "userId": _userRef.doc(UserModel.getProfile()!.uuid),
-      "userFullName": UserModel.getProfile()?.fullName ?? "",
-      "docId": _docsRef.doc(docId),
-      "isCompliment": isCompliment,
-      "qrCodeContent": qrCodeContent,
-      if (invalidOptId != null) "invalidOpt": invalidOptId,
-      if (noteCtr.text.isNotEmpty) "note": noteCtr.text,
-      "scannedAt": Timestamp.now(),
-    }).then((v) {
-      _isLoading = false;
+  void addScannedData({
+    required void Function() onSuccess,
+    required void Function() onError,
+  }) async {
+    try {
+      _isLoading = true;
       notifyListeners();
-      onSuccess();
-    }).catchError((e) {
-      _isLoading = false;
-      notifyListeners();
+      var user = UserModel.getProfile();
+      var checkpointData = await user?.checkpoint?.get();
+      var checkpointName = checkpointData?.data()?["name"];
+      var userDoc = _userRef.doc(user?.uuid);
+      _scannedListRef
+          .add({
+            "userId": userDoc,
+            "userFullName": user?.fullName ?? "",
+            "docId": _docsRef.doc(docId),
+            "isCompliment": isCompliment,
+            "qrCodeContent": qrCodeContent,
+            if (checkpointName != null) "checkpointName": checkpointName,
+            if (user?.checkpoint != null) "checkpoint": user?.checkpoint,
+            if (invalidOptId != null) "invalidOpt": invalidOptId,
+            if (noteCtr.text.isNotEmpty) "note": noteCtr.text,
+            "scannedAt": FieldValue.serverTimestamp(),
+          })
+          .then((v) async {
+            _isLoading = false;
+            notifyListeners();
+            onSuccess();
+            try {
+              if (checkpointData != null) {
+                var data = checkpointData.data();
+                data!["latestScannedAt"] = FieldValue.serverTimestamp();
+                user?.checkpoint?.set(data);
+              }
+              var userData = await userDoc.get();
+              var uData = userData.data() as Map<String, dynamic>;
+              uData["latestScannedAt"] = FieldValue.serverTimestamp();
+              userDoc.set(uData);
+            } catch (e) {
+              onError();
+              print("eeee: $e");
+            }
+          })
+          .catchError((e) {
+            _isLoading = false;
+            notifyListeners();
+            onError();
+          });
+    } catch (e) {
+      print("eeee: $e");
       onError();
-    });
+    }
   }
 }
