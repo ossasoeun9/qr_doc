@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:qr_doc/core/app_navigator.dart';
 import 'package:qr_doc/core/utils.dart';
+import 'package:qr_doc/models/user_model.dart';
 import 'package:qr_doc/pages/login_page.dart';
 import 'package:qr_doc/pages/qr_detail/qr_detail_page.dart';
 import 'package:qr_doc/pages/qr_detail/verify_doc_page.dart';
@@ -26,10 +25,10 @@ void main() async {
   FirebaseFirestore.instance.settings = const Settings(
     persistenceEnabled: true,
   );
-  if (kDebugMode) {
-    FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8060);
-    FirebaseStorage.instance.useStorageEmulator('localhost', 9199);
-  }
+  // if (kDebugMode) {
+  //   FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8060);
+  //   FirebaseStorage.instance.useStorageEmulator('localhost', 9199);
+  // }
   storagePref = await SharedPreferences.getInstance();
   runApp(const MyApp());
 }
@@ -52,14 +51,12 @@ class MyApp extends StatelessWidget {
 }
 
 final _router = GoRouter(
-  redirect: (context, state) {
+  redirect: (context, state) async {
+    await UserModel.syncUser();
     final loggedIn = LoginManager.isLoggedIn;
     final goingToLogin = state.matchedLocation == '/login';
     if (!loggedIn && !goingToLogin) return '/login';
     if (loggedIn && goingToLogin) return '/';
-    print(currentRoute);
-    print(state.matchedLocation);
-    print("----------");
     if (loggedIn && currentRoute != state.matchedLocation) {
       resetCurrentRoute();
       return "/";
